@@ -1,0 +1,38 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jedrek.mapper.UserMapper">
+    <insert id="saveUser" useGeneratedKeys="true" parameterType="com.jedrek.bean.User">
+        INSERT INTO user(username, truename, password, degree)
+    VALUES(#{username},#{truename},#{password},#{degree})
+    </insert>
+
+    <delete id="deleteUser">
+        DELETE FROM user where username = #{username}
+    </delete>
+
+    <update id="updateUserPassword">
+        UPDATE user SET password = #{password}
+        WHERE username = #{username}
+    </update>
+
+    <select id="queryUser" resultType="com.jedrek.bean.User">
+        SELECT * FROM user WHERE user_id = #{userId}
+    </select>
+
+    <select id="queryUserByName" resultType="com.jedrek.bean.User">
+        SELECT * FROM user WHERE username = #{username}
+    </select>
+
+    <select id="queryUsers" resultType="com.jedrek.bean.User">
+        SELECT * FROM user WHERE 1=1;
+    </select>
+
+    <select id="queryUserByNameAndPassword" resultType="com.jedrek.bean.User">
+        SELECT * FROM user where username = #{username} and password = #{password}
+    </select>
+
+    <select id="queryDegreeByName" resultType="int">
+        SELECT degree from user WHERE username = #{username}
+    </select>
+</mapper>

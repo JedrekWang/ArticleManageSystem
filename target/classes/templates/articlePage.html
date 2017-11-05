@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://cdn.bootcss.com/jquery/2.1.1/jquery.min.js"></script>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /*#head label{*/
+            /*float: left;*/
+            /*margin-left: 40px;*/
+        /*}*/
+        /*#head h2{*/
+            /*float: left;*/
+            /*margin-left:40px;*/
+        /*}*/
+        #articleHead{
+            margin-left:450px;
+        }
+        #articleHead h4+label{
+            float: left;
+            margin-left: 40px;
+        }
+        #pass{
+            margin-top:100px;
+        }
+        #title{
+            text-align: center;
+            margin:0 auto;
+        }
+        #content{
+            margin-top:100px;
+            margin-left:20%;
+            margin-right:20%;
+        }
+        #footer{
+            margin-top:50px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-inverse" role="navigation">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">公文管理系统</a>
+            </div>
+            <div>
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="#">当前用户:</a></li>
+                    <li><a href="#" id="user" th:text="${session.user.username}">currentUser</a></li>
+                    <li><a href="#">当前角色为:</a></li>
+                    <li>
+                        <a href="#" class="text-default" th:if="${session.user.degree eq 2}" th:text="普通职员">degree</a>
+                        <a href="#" class="text-default" th:if="${session.user.degree eq 3}" th:text="部门领导">degree</a>
+                        <a href="#" class="text-default" th:if="${session.user.degree eq 4}" th:text="管理员">degree</a>
+                        <a href="#" class="text-default" th:if="${session.user.degree eq 5}" th:text="单位领导">degree</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <h1 id="title" th:text="${article.title}">标题</h1>
+    <div id="articleHead">
+        <h4 style="display: none;">hahah</h4>
+        <label for="writer">作者  </label>
+        <h4 id="writer" class="text-primary" th:text="${article.writer}">作者</h4>
+        <label for="submitDate">提交日期  </label>
+        <h4 id="submitDate" class="text-primary" th:text="${article.submitDate}">提交日期</h4>
+        <label for="institution">作者机构  </label>
+        <h4 id="institution" class="text-primary" th:text="${article.institution}">作者机构</h4>
+    </div>
+    <!--公开级别不知道有什么用-->
+    <!--<h2 th:text="${article.secret}">公开级别</h2>-->
+    <div class="well" id="content">
+        <p th:text="${article.content}">内容</p>
+    </div>
+    <div id="pass">
+        <label>部门审批状态:</label>
+        <h3 class="text-success" th:if="${article.departmentPass eq 1}" th:text="审批通过">departmentPass</h3>
+        <h3 class="text-danger" th:if="${article.departmentPass eq 0}" th:text="驳回">departmentPass</h3>
+        <h3 class="text-primary" th:if="${article.departmentPass eq null}" th:text="未审批">departmentPass</h3>
+
+        <label th:if="!${article.departmentReview eq null}">部门审批意见:</label>
+        <h3 class="text-primary" th:text="${article.departmentReview}">部门审批意见</h3>
+
+        <label>单位审批状态:</label>
+        <h3 class="text-success" th:if="${article.unitPass eq 1}" th:text="审批通过">unitPass</h3>
+        <h3 class="text-danger" th:if="${article.unitPass eq 0}" th:text="驳回">unitPass</h3>
+        <h3 class="text-primary" th:if="${article.unitPass eq null}" th:text="未审批">unitPass</h3>
+
+        <label th:if="!${article.unitReview eq null}">单位审批意见:</label>
+        <h3 class="text-primary" th:text="${article.unitReview}">单位审批意见</h3>
+    </div>
+    <div id="footer">
+        <a style="text-align: center" class="btn btn-primary" th:if="${article.departmentPass eq null && session.user.degree eq 3}" href="/articles/departmentReview">部门审批</a>
+        <a style="text-align: center" class="btn btn-priamry" th:if="${article.unitPass eq null && session.user.degree eq 5}" href="/articles/unitReview">单位审批</a>
+    </div>
+
+</body>
+</html>

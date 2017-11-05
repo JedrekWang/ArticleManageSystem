@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>审批页面</title>
+    <script src="https://cdn.bootcss.com/jquery/2.1.1/jquery.min.js"></script>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        #user{
+            text-align: center;
+            width:500px;
+            margin: 0 auto;
+            margin-top:100px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-inverse" role="navigation">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">公文管理系统</a>
+            </div>
+            <div>
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="#">当前用户:</a></li>
+                    <li><a href="#" th:text="${session.user.username}">currentUser</a></li>
+                    <li><a href="#">当前角色为:</a></li>
+                    <li><a href="#" class="text-default" th:text="${session.user.degree}">degree</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <form role="form" id="user" method="post">
+        <input  type="hidden" th:value="${session.sessionArticle.title}" name="title"/>
+        <div class="form-group">
+            <input class="form-control" type="text" th:value="${session.user.username}" name="departmentPassUser"/>
+        </div>
+        <div class="form-group">
+            <input class="form-control" type="text" placeholder="输入部门审批意见" name="departmentReview"/>
+        </div>
+        <label for="unitPass">你的审批结果为</label>
+        <div id="unitPass" class="form-group">
+        <label><input class="form-control" name="departmentPass" type="radio" value="1" />通过</label>
+        <label><input class="form-control" name="departmentPass" type="radio" value="0" />驳回</label>
+        </div>
+            <br/>
+        <input class="btn btn-default" type="submit"/>
+    </form>
+</body>
+</html>

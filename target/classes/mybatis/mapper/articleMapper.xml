@@ -1,0 +1,72 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jedrek.mapper.ArticleMapper">
+    <insert id="saveArticle" useGeneratedKeys="true" parameterType="com.jedrek.bean.Article">
+        INSERT INTO article (content, title, submit_date, writer, institution, department_pass,
+        department_review, department_pass_user, unit_pass, unit_review, unit_pass_user,secret)
+        VALUES (#{content},#{title},#{submitDate},#{writer},#{institution},#{departmentPass},
+        #{departmentReview},#{departmentPassUser},#{unitPass},#{unitReview},#{unitPassUser},#{secret})
+    </insert>
+
+    <delete id="deleteArticle">
+        DELETE FROM article where title = #{title}
+    </delete>
+
+    <select id="queryArticles" resultType="com.jedrek.bean.Article">
+        SELECT * FROM article WHERE secret = #{secret}
+    </select>
+
+    <select id="queryArticle" resultType="com.jedrek.bean.Article">
+        SELECT article_id as articleId,title,content,writer,institution,department_pass as departmentPass,
+        unit_pass as unitPass,department_review AS departmentReview,unit_review as unitReview,secret,submit_date as submitDate
+        FROM article where title = #{title}
+    </select>
+
+    <select id="queryArticleById" resultType="com.jedrek.bean.Article">
+        SELECT article_id as articleId,title,content,writer,institution,department_pass as departmentPass,unit_pass as unitPass
+        FROM article where article_id = #{articleId}
+    </select>
+
+    <select id="queryArticlesByWriter" resultType="com.jedrek.bean.Article">
+         SELECT title,content,writer,institution,department_pass as departmentPass,unit_pass as unitPass
+          FROM article where writer = #{writer}
+    </select>
+
+    <select id="queryArticleByPublic" resultType="com.jedrek.bean.Article">
+        SELECT article_id as articleId,title,content,writer,institution,department_pass as departmentPass,
+        unit_pass as unitPass,department_review AS departmentReview,unit_review as unitReview,secret,submit_date as submitDate
+        FROM article where department_pass = 1 AND unit_pass = 1;
+    </select>
+
+    <update id="updateDepartmentPassStatus">
+        UPDATE article SET department_pass = #{departmentPass},
+        department_review = #{departmentReview},
+        department_pass_user = #{departmentPassUserId}
+        WHERE title = #{title}
+    </update>
+
+    <update id="updateUnitPassStatus">
+        UPDATE article SET unit_pass = #{unitPass},
+        unit_review = #{unitReview},
+        unit_pass_user = #{unitPassUserId}
+        WHERE title = #{title}
+    </update>
+
+    <select id="queryDepartmentArticles" resultType="com.jedrek.bean.Article">
+        SELECT article_id as articleId,title,content,writer,institution,department_pass as departmentPass,
+        unit_pass as unitPass,department_review AS departmentReview,unit_review as unitReview,secret,submit_date as submitDate
+        FROM article where department_pass IS null AND unit_pass IS null;
+    </select>
+
+    <select id="queryUnitArticles" resultType="com.jedrek.bean.Article">
+        SELECT article_id as articleId,title,content,writer,institution,department_pass as departmentPass,
+        unit_pass as unitPass,department_review AS departmentReview,unit_review as unitReview,secret,submit_date as submitDate
+        FROM article WHERE department_pass = 1 AND unit_pass IS NULL;
+    </select>
+
+    <select id="queryAllArticles" resultType="com.jedrek.bean.Article">
+        SELECT article_id as articleId,title,content,writer,institution,department_pass as departmentPass,unit_pass as unitPass
+        FROM article;
+    </select>
+</mapper>

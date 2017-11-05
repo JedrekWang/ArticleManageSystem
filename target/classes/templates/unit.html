@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://cdn.bootcss.com/jquery/2.1.1/jquery.min.js"></script>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        #test .btn{
+            float: left;
+            margin-left: 30px;
+        }
+        #test{
+            height:100px;
+        }
+    </style>
+    <script>
+        function showUnitArticles(table1) {
+            var target = document.getElementById(table1);
+            if(target.style.display == "none") {
+                target.style.display = "";
+            } else {
+                target.style.display = "none";
+            }
+        }
+        function queryArticles(table2) {
+            var target = document.getElementById(table2);
+            if(target.style.display == "none") {
+                target.style.display = "";
+            } else {
+                target.style.display = "none";
+            }
+        }
+        function changePassword(shit) {
+            var target = document.getElementById(shit);
+            var username = target.innerHTML;
+            var url = "http://localhost:8088/users/password?username="+username;
+            window.open(url);
+        }
+    </script>
+</head>
+<body>
+    <nav class="navbar navbar-inverse" role="navigation">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">公文管理系统</a>
+            </div>
+            <div>
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="#">当前用户:</a></li>
+                    <li><a href="#" th:text="${session.user.username}">currentUser</a></li>
+                    <li><a href="#">当前角色为:</a></li>
+                    <li>
+                        <a href="#" class="text-default" th:if="${session.user.degree eq 2}" th:text="普通职员">degree</a>
+                        <a href="#" class="text-default" th:if="${session.user.degree eq 3}" th:text="部门领导">degree</a>
+                        <a href="#" class="text-default" th:if="${session.user.degree eq 4}" th:text="管理员">degree</a>
+                        <a href="#" class="text-default" th:if="${session.user.degree eq 5}" th:text="单位领导">degree</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+<!--单位领导页面-->
+    <h1 id="shit" th:text="${user.username}">单位领导页面</h1>
+    <div id="test">
+        <input class="btn btn-primary" type="button" onclick="showUnitArticles('table1')" th:value="查看所有待审批公文"/>
+        <input class="btn btn-primary" type="button" onclick="queryArticles('table2')" th:value="查看所有公开公文"/>
+        <input class="btn btn-primary" type="button" onclick="changePassword('shit')" th:value="更改密码"/>
+    </div>
+    <div class="well" id="table1"  style="display: none">
+        <h3 class="text-default">所有待审批的公文</h3>
+        <table class="table table-striped">
+            <tr>
+                <th>标题</th>
+                <th>提交日期</th>
+                <th>作者</th>
+                <th>作者机构</th>
+                <th>部门审批状态</th>
+                <th>单位审批状态</th>
+            </tr>
+            <tr th:each="article : ${unitArticles}">
+                <td><a th:text="${article.title}" href="#" th:href="@{/articles/{title}(title=${article.title})}">title</a></td>
+                <!--<td th:text="${article.title}">title</td>-->
+                <td th:text="${article.submitDate}">submitDate</td>
+                <td th:text="${article.writer}">writer</td>
+                <td th:text="${article.institution}">institution</td>
+                <td th:if="${article.departmentPass eq 1}" th:text="审批通过">departmentPass</td>
+                <td th:if="${article.departmentPass eq 0}" th:text="驳回">departmentPass</td>
+                <td th:if="${article.departmentPass eq null}" th:text="未审批">departmentPass</td>
+                <td th:if="${article.unitPass eq 1}" th:text="审批通过">unitPass</td>
+                <td th:if="${article.unitPass eq 0}" th:text="驳回">unitPass</td>
+                <td th:if="${article.unitPass eq null}" th:text="未审批">unitPass</td>
+            </tr>
+        </table>
+    </div>
+
+    <div style="height: 150px;width: 100%"></div>
+
+    <div class="well" id="table2" style="display: none">
+        <h3 class="text-default">所有公开的公文</h3>
+        <table class="table table-striped">
+            <tr>
+                <th>标题</th>
+                <th>提交日期</th>
+                <th>作者</th>
+                <th>作者机构</th>
+                <th>部门审批状态</th>
+                <th>单位审批状态</th>
+            </tr>
+            <tr th:each="article : ${articles}">
+                <td><a th:text="${article.title}" href="#" th:href="@{/articles/{title}(title=${article.title})}">title</a></td>
+                <td th:text="${article.submitDate}">submitDate</td>
+                <td th:text="${article.writer}">writer</td>
+                <td th:text="${article.institution}">institution</td>
+                <td th:if="${article.departmentPass eq 1}" th:text="审批通过">departmentPass</td>
+                <td th:if="${article.departmentPass eq 0}" th:text="驳回">departmentPass</td>
+                <td th:if="${article.departmentPass eq null}" th:text="未审批">departmentPass</td>
+                <td th:if="${article.unitPass eq 1}" th:text="审批通过">unitPass</td>
+                <td th:if="${article.unitPass eq 0}" th:text="驳回">unitPass</td>
+                <td th:if="${article.unitPass eq null}" th:text="未审批">unitPass</td>
+            </tr>
+        </table>
+    </div>
+</body>
+</html>
